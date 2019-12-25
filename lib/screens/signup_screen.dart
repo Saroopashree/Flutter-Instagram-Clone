@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_instagram_clone/services/auth_service.dart';
 
 class SignupScreen extends StatefulWidget {
   static final String id = "signup_screen";
@@ -17,6 +18,8 @@ class _SignupScreenState extends State<SignupScreen> {
       print("Name: $_name");
       print("Email: $_email");
       print("Password: $_password");
+
+      AuthService.signupUser(context, _name, _email, _password);
     }
   }
 
@@ -47,8 +50,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           labelStyle:
                               TextStyle(fontSize: 20.0, fontFamily: 'Verdana'),
                         ),
-                        validator: (input) =>
-                            !input.trim().isEmpty ? null : "Your name is required!",
+                        validator: (input) => !input.trim().isEmpty
+                            ? null
+                            : "Your name is required!",
                         onSaved: (input) => _name = input,
                       ),
                     ),
@@ -104,7 +108,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     SizedBox(height: 20.0),
                     FlatButton(
-                      color: Color.fromARGB(0, 255, 255, 255),    // Transparent white
                       child: Text(
                         "Back To Login",
                         style: TextStyle(
