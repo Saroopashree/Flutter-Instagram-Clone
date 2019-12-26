@@ -48,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                           labelText: "Email",
                           labelStyle:
-                              TextStyle(fontSize: 20.0, fontFamily: 'Verdana'),
+                              TextStyle(fontSize: 20.0),
                         ),
                         validator: (input) => input.contains('@')
                             ? null
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         decoration: InputDecoration(
                           labelText: "Password",
                           labelStyle:
-                              TextStyle(fontSize: 20.0, fontFamily: 'Verdana'),
+                              TextStyle(fontSize: 20.0),
                         ),
                         validator: (input) => input.length > 6
                             ? null

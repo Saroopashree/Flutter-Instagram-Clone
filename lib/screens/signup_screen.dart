@@ -80,7 +80,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           labelStyle:
                               TextStyle(fontSize: 20.0, fontFamily: 'Verdana'),
                         ),
-                        validator: (input) => input.length > 6
+                        validator: (input) => input.length >= 6
                             ? null
                             : "Must be atleast 6 characters",
                         onSaved: (input) => _password = input,

@@ -7,6 +7,11 @@ import 'package:flutter_instagram_clone/screens/profile_screen.dart';
 import 'package:flutter_instagram_clone/screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+
+  final String userId;
+
+  HomeScreen({this.userId});
+
   _HomeScreenState createState() => _HomeScreenState();
 }
 
@@ -21,17 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(
-          "Instagram",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 35.0,
-            fontFamily: 'Billabong',
-          ),
-        ),
-      ),
       body: PageView(
         controller: _pageController,
         children: <Widget>[
@@ -39,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SearchScreen(),
           CreatePostScreen(),
           ActivityScreen(),
-          ProfileScreen()
+          ProfileScreen(userId: widget.userId),
         ],
         onPageChanged: (index) {
           setState(() {
