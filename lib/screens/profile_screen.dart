@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/models/user_model.dart';
@@ -62,8 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       children: <Widget>[
                         CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              "https://previews.123rf.com/images/anastasiatukaeva/anastasiatukaeva1702/anastasiatukaeva170200139/71898602-portrait-cartoon-of-a-bearded-man-in-a-barbershop-the-head-is-brutal-man-vector-illustration-isolate.jpg"),
+                          backgroundColor: Colors.blueGrey[200],
+                          backgroundImage: user.profileImageURL == null ? AssetImage("assets/images/user_default_image.png") : CachedNetworkImageProvider(user.profileImageURL),
                           radius: 50.0,
                         ),
                         Expanded(

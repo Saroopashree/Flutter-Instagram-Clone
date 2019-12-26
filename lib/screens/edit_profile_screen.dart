@@ -1,6 +1,11 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instagram_clone/models/user_model.dart';
 import 'package:flutter_instagram_clone/services/database_service.dart';
+import 'package:flutter_instagram_clone/services/storage_service.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final User user;
@@ -14,15 +19,31 @@ class EditProfileScreen extends StatefulWidget {
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  File _profileImage;
+
   String _name;
   String _username;
   String _website;
   String _bio;
   String _profileImageURL;
 
-  void _submit() {
+  bool _isLoading = false;
+
+  void _submit() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+
+      setState(() {
+        _isLoading = true;
+      });
+
+      if (_profileImage == null) {
+        _profileImageURL = widget.user.profileImageURL;
+      } else {
+        _profileImageURL = await StorageService.uploadProfileImage(
+            widget.user.profileImageURL, _profileImage);
+      }
+
       User newUser = User(
         id: widget.user.id,
         name: _name,
@@ -35,6 +56,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       DatabaseService.updateUser(newUser);
 
       Navigator.pop(context);
+    }
+  }
+
+  void _handleImageFromGallery() async {
+    File imageFile = await ImagePicker.pickImage(source: ImageSource.gallery);
+    if (imageFile != null) {
+      setState(() {
+        _profileImage = imageFile;
+      });
+    }
+  }
+
+  _displayProfileImage() {
+    if (_profileImage != null) {
+      return FileImage(_profileImage);
+    } else {
+      if (widget.user.profileImageURL != null) {
+        return CachedNetworkImageProvider(widget.user.profileImageURL);
+      } else {
+        return AssetImage("assets/images/user_default_image.png");
+      }
     }
   }
 
@@ -60,17 +102,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 children: <Widget>[
+                  _isLoading
+                      ? Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: LinearProgressIndicator(
+                            backgroundColor: Colors.black38,
+                            valueColor: AlwaysStoppedAnimation(Colors.black),
+                          ),
+                      )
+                      : SizedBox.shrink(),
                   CircleAvatar(
                     radius: 65.0,
-                    backgroundImage: NetworkImage(
-                        "https://previews.123rf.com/images/anastasiatukaeva/anastasiatukaeva1702/anastasiatukaeva170200139/71898602-portrait-cartoon-of-a-bearded-man-in-a-barbershop-the-head-is-brutal-man-vector-illustration-isolate.jpg"),
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: _displayProfileImage(),
                   ),
                   FlatButton(
                     child: Text(
@@ -82,7 +133,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         decoration: TextDecoration.underline,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: _handleImageFromGallery,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
