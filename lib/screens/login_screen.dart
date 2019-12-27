@@ -67,9 +67,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             labelStyle:
                                 TextStyle(fontSize: 20.0),
                           ),
-                          validator: (input) => input.length > 6
-                              ? null
-                              : "Must be atleast 6 characters",
+//                          validator: (input) => input.length >= 6
+//                              ? null
+//                              : "Must be atleast 6 characters",
                           onSaved: (input) => _password = input,
                           obscureText: true,
                         ),

@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: <Widget>[
                         CircleAvatar(
                           backgroundColor: Colors.blueGrey[200],
-                          backgroundImage: user.profileImageURL == null ? AssetImage("assets/images/user_default_image.png") : CachedNetworkImageProvider(user.profileImageURL),
+                          backgroundImage: user.profileImageURL.isEmpty ? AssetImage("assets/images/user_default_image.png") : CachedNetworkImageProvider(user.profileImageURL),
                           radius: 50.0,
                         ),
                         Expanded(
